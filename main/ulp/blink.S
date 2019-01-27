@@ -21,27 +21,23 @@ entry:
   
   WRITE_RTC_REG(RTC_GPIO_OUT_REG, RTC_GPIO_OUT_DATA_S + gpio_2, 1, 1)
 
-next:
-
+on:
   WRITE_RTC_REG(RTC_GPIO_ENABLE_W1TS_REG, RTC_GPIO_ENABLE_W1TS_S + gpio_2, 1, 1)
 
-  move  r1,200            // wait in ms
-delay0:
-  wait  8000              // wait 8000 clock ticks at 8MHz -> 1ms
-  sub   r1, r1, 1         // decrement ms count
-  jump  delay0_ready, eq  // if ms count is zero then return to caller
-  jump  delay0            // else continue to wait
-delay0_ready:
+  move  r1, 200           // wait in ms
+  move  r2, off           // return address
+  jump  delay             // call subroutine
 
+off:
   WRITE_RTC_REG(RTC_GPIO_ENABLE_W1TC_REG, RTC_GPIO_ENABLE_W1TC_S + gpio_2, 1, 1)
 
-  move  r1,800            // wait in ms
-delay1:
+  move  r1, 800           // wait in ms
+  move  r2, on            // return address
+  jump  delay             // call subroutine
+
+delay:
   wait  8000              // wait 8000 clock ticks at 8MHz -> 1ms
   sub   r1, r1, 1         // decrement ms count
-  jump  delay1_ready, eq  // if ms count is zero then return to caller
-  jump  delay1            // else continue to wait
-delay1_ready:
-
-  jump  next
+  jump  r2, eq            // if ms count is zero then return to caller
+  jump  delay             // else continue to wait
 
