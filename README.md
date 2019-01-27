@@ -65,10 +65,11 @@ make app-flash
 ```
 
 ### List all the other possibilities
+```
 make help
 ```
 
-## ToDO
+## ToDo
 
 Currently I have to do a rtc_gpio_init() in the main processor.
 If I dont, the pin wont toggle and stays off.
