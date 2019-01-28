@@ -44,11 +44,18 @@ Best to add this to your ~/.profile
 . ~/esp32/env.sh
 ```
 
-* Build this example, flash it and open serial console (defaults for ESPPORT and ESPBAUD can be configured in sdkconfig file)
+* Fetch and build this example, flash it and open serial console (adapt ESPPORT and ESPBAUD to your setup. Can be configured in sdkconfig file)
 ```
-make -j6 flash ESPPORT=/dev/ttyUSB0 ESPBAUD=115200 monitor
+mkdir /tmp/blink-$$ && \
+cd /tmp/blink-$$ && \
+git clone https://github.com/joba-1/Blink-ULP.git && \
+cd Blink-ULP && \
+make -j8 flash monitor ESPPORT=/dev/ttyUSB0 ESPBAUD=115200
+
 ```
 A led connected to gnd (kathode) and gpio2 (anode) should blink now.
+
+Exit the monitor with [Ctrl]-] (which is [Strg]-[Alt-Gr]-] on german keyboard)
 
 ## Other make targets
 
