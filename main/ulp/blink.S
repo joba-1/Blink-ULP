@@ -15,30 +15,24 @@
 .text
 
 entry:
-  // I thought this is needed to use pad 2 from rtc mux, but it is not (last parm = 0 or 1)
+  // might be needed for some pads, but surely not #2
   // WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_TO_GPIO_S, 1, 1)
 
-  // use digital function, not rtc function (last parm = 0: adc?)
+  // use digital function, not rtc function
   WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_MUX_SEL_S, 1, 1)
 
   // gpio_2 shall be output, not input
   WRITE_RTC_REG(RTC_GPIO_OUT_REG, RTC_GPIO_OUT_DATA_S + gpio_2, 1, 1)
 
 on:
-  // Cleared hold is standard: pad looses level on sleep/reset, but level can be changed
-  // WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_HOLD_S, 1, 0)
   WRITE_RTC_REG(RTC_GPIO_ENABLE_W1TS_REG, RTC_GPIO_ENABLE_W1TS_S + gpio_2, 1, 1)
-  // Set hold if ulp may go to sleep and clear above before changing the output level
-  // WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_HOLD_S, 1, 1)
 
   move  r1, 200           // wait in ms
   move  r2, off           // return address
   jump  delay             // call subroutine
 
 off:
-  // WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_HOLD_S, 1, 0)
   WRITE_RTC_REG(RTC_GPIO_ENABLE_W1TC_REG, RTC_GPIO_ENABLE_W1TC_S + gpio_2, 1, 1)
-  // WRITE_RTC_REG(RTC_IO_TOUCH_PAD2_REG, RTC_IO_TOUCH_PAD2_HOLD_S, 1, 1)
 
   move  r1, 800           // wait in ms
   move  r2, on            // return address
