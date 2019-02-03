@@ -76,11 +76,4 @@ make app-flash
 make help
 ```
 
-## ToDo
-
-Currently I have to do a rtc_gpio_init() in the main processor.
-If I dont, the pin wont toggle and stays off.
-I think it should be possible to do the equivalent init in ULP, but so far something is missing...
-
-
 JoBa1
